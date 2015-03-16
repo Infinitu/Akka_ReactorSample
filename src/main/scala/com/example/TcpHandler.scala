@@ -20,8 +20,7 @@ class TcpHandler extends Actor{
     case Received(data) ⇒
       val header = new String(data.slice(0,6).toArray)
       val command = Command(header, sender(), data.drop(7))
-      val dispatcher = Dispatcher.actorSystem.actorOf(Props[Dispatcher])
-      dispatcher ! command
+      Dispatcher.dispatcherRouter.route(command,sender())
     case PeerClosed     ⇒ context stop self
   }
 }

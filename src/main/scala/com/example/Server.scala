@@ -17,7 +17,7 @@ object Server {
   def actorSystem = ActorSystem("server")
 
   case class Start(port: Int,
-                   backlog: Int = 100,
+                   backlog: Int = 10000,
                    options: immutable.Traversable[SocketOption] = Nil,
                    pullMode: Boolean = false)
 
@@ -41,7 +41,7 @@ class Server extends Actor{
       //stop
     case c @ Connected(remote, local) ⇒
       val handler = context.actorOf(Props[TcpHandler])
-      val connection = sender
+      val connection = sender()
       connection ! Register(handler)
   }
 }
